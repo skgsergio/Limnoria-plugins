@@ -1,0 +1,59 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2013-11-14 18:05+CET\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: ENCODING\n"
+"Generated-By: pygettext.py 1.5\n"
+
+
+#: config.py:42
+msgid ""
+"This plugin offers a snarfer that will try to fetch info about\n"
+"             Youtube videos that it sees in the channel. Would you like this\n"
+"             snarfer to be enabled?"
+msgstr ""
+
+#: config.py:51
+msgid ""
+"Determines whether the bot will output the\n"
+"    Youtube videos it sees in the channel."
+msgstr ""
+
+#: plugin.py:61
+#, docstring
+msgid "Listens for Youtube URLs and retrieves video info."
+msgstr ""
+
+#: plugin.py:97
+msgid "YouTube: %s"
+msgstr ""
+
+#: plugin.py:100
+msgid " - %s"
+msgstr ""
+
+#: plugin.py:104
+msgid " - %s views"
+msgstr ""
+
+#: plugin.py:107
+msgid " - %.1f/5.0 (%s ratings)"
+msgstr ""
+
+#: plugin.py:112
+msgid " - user: %s"
+msgstr ""
+
+#: plugin.py:116
+msgid " - date: %s"
+msgstr ""
+
