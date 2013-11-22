@@ -32,6 +32,8 @@ import sys
 import json
 from datetime import timedelta
 from dateutil import parser, tz
+
+import supybot.log as log
 import supybot.conf as conf
 import supybot.utils as utils
 from supybot.commands import *
@@ -83,42 +85,47 @@ class Youtube(callbacks.PluginRegexp):
         if self.registryValue('youtubeSnarfer', channel):
             ytid = self._youtubeId(match.group(0))
             if ytid:
-                apiReq = urlopen(self._apiUrl.format(ytid))
+                try:
+                    apiReq = urlopen(self._apiUrl.format(ytid))
+                except:
+                    log.error("Couldn't connect to Youtube's API.")
+                    apiReq = None
 
-                if sys.version_info[0] < 3:
-                    apiRes = json.loads(apiReq.read())
-                else:
-                    apiRes = json.loads(apiReq.read().decode(apiReq.headers.get_content_charset()))
+                if apiReq:
+                    if sys.version_info[0] < 3:
+                        apiRes = json.loads(apiReq.read())
+                    else:
+                        apiRes = json.loads(apiReq.read().decode(apiReq.headers.get_content_charset()))
 
-                if 'data' in apiRes:
-                    vInfo = apiRes['data']
+                    if 'data' in apiRes:
+                        vInfo = apiRes['data']
 
-                    s = format(_("YouTube: %s"), vInfo['title'])
+                        s = format(_("YouTube: %s"), vInfo['title'])
 
-                    if 'duration' in vInfo:
-                        s += format(_(" - %s"),
-                                    str(timedelta(seconds=int(vInfo['duration']))))
+                        if 'duration' in vInfo:
+                            s += format(_(" - %s"),
+                                        str(timedelta(seconds=int(vInfo['duration']))))
 
-                    if 'viewCount' in vInfo:
-                        s += format(_(" - %s views"), "{:,}".format(vInfo['viewCount']))
+                        if 'viewCount' in vInfo:
+                            s += format(_(" - %s views"), "{:,}".format(vInfo['viewCount']))
 
-                    if 'rating' in vInfo:
-                        s += format(_(" - %.1f/5.0 (%s ratings)"),
-                                    vInfo['rating'],
-                                    vInfo['ratingCount'])
+                        if 'rating' in vInfo:
+                            s += format(_(" - %.1f/5.0 (%s ratings)"),
+                                        vInfo['rating'],
+                                        vInfo['ratingCount'])
 
-                    if 'uploader' in vInfo:
-                        s += format(_(" - user: %s"),
-                                    vInfo['uploader'])
+                        if 'uploader' in vInfo:
+                            s += format(_(" - user: %s"),
+                                        vInfo['uploader'])
 
-                    if 'uploaded' in vInfo:
-                        s += format(_(" - date: %s"),
-                                    parser.parse(vInfo['uploaded']).astimezone(tz.tzlocal()))
+                        if 'uploaded' in vInfo:
+                            s += format(_(" - date: %s"),
+                                        parser.parse(vInfo['uploaded']).astimezone(tz.tzlocal()))
 
-                    if 'contentRating' in vInfo:
-                        s += " - NSFW!"
+                        if 'contentRating' in vInfo:
+                            s += " - NSFW!"
 
-                    irc.reply(s, prefixNick=False)
+                        irc.reply(s, prefixNick=False)
 
     youtubeSnarfer = urlSnarfer(youtubeSnarfer)
     youtubeSnarfer.__doc__ = utils.web._httpUrlRe

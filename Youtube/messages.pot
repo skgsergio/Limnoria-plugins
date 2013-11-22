@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2013-11-14 18:05+CET\n"
+"POT-Creation-Date: 2013-11-22 12:32+CET\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,32 +28,32 @@ msgid ""
 "    Youtube videos it sees in the channel."
 msgstr ""
 
-#: plugin.py:61
+#: plugin.py:60
 #, docstring
 msgid "Listens for Youtube URLs and retrieves video info."
 msgstr ""
 
-#: plugin.py:97
+#: plugin.py:100
 msgid "YouTube: %s"
 msgstr ""
 
-#: plugin.py:100
+#: plugin.py:103
 msgid " - %s"
 msgstr ""
 
-#: plugin.py:104
+#: plugin.py:107
 msgid " - %s views"
 msgstr ""
 
-#: plugin.py:107
+#: plugin.py:110
 msgid " - %.1f/5.0 (%s ratings)"
 msgstr ""
 
-#: plugin.py:112
+#: plugin.py:115
 msgid " - user: %s"
 msgstr ""
 
-#: plugin.py:116
+#: plugin.py:119
 msgid " - date: %s"
 msgstr ""
 
