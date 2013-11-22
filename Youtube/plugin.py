@@ -32,7 +32,6 @@ import sys
 import json
 from datetime import timedelta
 from dateutil import parser, tz
-import supybot.log as log
 import supybot.conf as conf
 import supybot.utils as utils
 from supybot.commands import *
