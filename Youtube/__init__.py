@@ -38,7 +38,7 @@ import supybot.world as world
 __version__ = "1.0"
 __author__ = supybot.Author('Sergio Conde', '[SkG]', 'skgsergio@gmail.com')
 __contributors__ = {}
-__url__ = 'https://github.com/skgsergio/Supybot-plugins'
+__url__ = 'https://github.com/skgsergio/Limnoria-plugins'
 
 from . import config
 from . import plugin
