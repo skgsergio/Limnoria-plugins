@@ -44,7 +44,7 @@ import supybot.callbacks as callbacks
 
 if sys.version_info[0] < 3:
     from urlparse import urlparse, parse_qs
-    from urllib import urlopen
+    from urllib2 import urlopen
 else:
     from urllib.parse import urlparse, parse_qs
     from urllib.request import urlopen
