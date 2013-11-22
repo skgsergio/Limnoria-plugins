@@ -93,9 +93,11 @@ class Youtube(callbacks.PluginRegexp):
 
                 if apiReq:
                     if sys.version_info[0] < 3:
-                        apiRes = json.loads(apiReq.read())
+                        apiRes = apiReq.read()
                     else:
-                        apiRes = json.loads(apiReq.read().decode(apiReq.headers.get_content_charset()))
+                        apiRes = apiReq.read().decode(apiReq.headers.get_content_charset())
+
+                    apiRes = json.loads(apiRes)
 
                     if 'data' in apiRes:
                         vInfo = apiRes['data']
