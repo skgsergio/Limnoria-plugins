@@ -79,6 +79,9 @@ class Minecraft(callbacks.Plugin):
             msg = msg.replace(rep[1], rep[0])
         return msg.replace('\xa7k', '')
 
+    def _toLenAndUtf16(self, string):
+        return bytes(struct.pack(str('!h'), len(string))) + bytes(string.encode('utf-16be'))
+
     def mc(self, irc, msg, args, server):
         """<host|host:port>
         Asks for Minecraft server information. Host can be a domain or an IP."""
@@ -98,9 +101,16 @@ class Minecraft(callbacks.Plugin):
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             try:
                 sock.connect((host, port))
-                sock.send(b'\xfe\x01')
-                response = sock.recv(1)
 
+                # Minecraft Handshake: For more info see http://wiki.vg/Server_List_Ping
+                sock.send(b'\xfe\x01\xfa')
+                sock.send(self._toLenAndUtf16('MC|PingHost'))
+                sock.send(bytes(struct.pack(str('!h'), 7 + 2*len(host))))
+                sock.send(bytes(struct.pack(str('!b'), 78)))
+                sock.send(self._toLenAndUtf16(host))
+                sock.send(bytes(struct.pack(str('!I'), port)))
+
+                response = sock.recv(1)
                 if response != b'\xff':
                     irc.error(_("Server error or not a Minecraft server."))
                     return
@@ -109,11 +119,11 @@ class Minecraft(callbacks.Plugin):
                 values = sock.recv(length * 2).decode('utf-16be')
 
                 data = values.split('\x00')
-                if len(data) == 1: # Old fmt
+                if len(data) == 1: # 1.8-Beta to 1.3
                     data = values.split('\xa7')
                     message = format(_("%s - %s/%s players"),
                                      data[0], data[1], data[2])
-                else: # New fmt
+                else: # 1.4 to 1.6 (1.7 it's supported too, it have a protocol but supports old)
                     message = format(_("%s\x0f - %s - %s/%s players"),
                                      data[3], data[2], data[4], data[5])
 

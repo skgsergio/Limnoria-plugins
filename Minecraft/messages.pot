@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2013-11-22 21:21+CET\n"
+"POT-Creation-Date: 2013-11-23 12:32+CET\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,45 +34,45 @@ msgid ""
 "    Gets info from a Minecraft server (users, name, ...)."
 msgstr ""
 
-#: plugin.py:83
+#: plugin.py:86
 #, docstring
 msgid ""
 "<host|host:port>\n"
 "        Asks for Minecraft server information. Host can be a domain or an IP."
 msgstr ""
 
-#: plugin.py:96
+#: plugin.py:99
 msgid "Invalid port."
 msgstr ""
 
-#: plugin.py:105
+#: plugin.py:115
 msgid "Server error or not a Minecraft server."
 msgstr ""
 
-#: plugin.py:114
+#: plugin.py:124
 msgid "%s - %s/%s players"
 msgstr ""
 
-#: plugin.py:117
+#: plugin.py:127
 msgid "%s\017 - %s - %s/%s players"
 msgstr ""
 
-#: plugin.py:123
+#: plugin.py:133
 msgid "Couldn't connect to server."
 msgstr ""
 
-#: plugin.py:128
+#: plugin.py:138
 #, docstring
 msgid ""
 "takes no arguments\n"
 "        Shows the status of the Minecraft/Mojang servers."
 msgstr ""
 
-#: plugin.py:159
+#: plugin.py:169
 msgid "[Minecraft Status] %s%s%s%s%s"
 msgstr ""
 
-#: plugin.py:167
+#: plugin.py:177
 msgid "[Minecraft Status] Status checker is down! Maybe other Minecraft/Mojang services are affected too."
 msgstr ""
 
