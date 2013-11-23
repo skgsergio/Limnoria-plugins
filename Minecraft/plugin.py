@@ -65,6 +65,10 @@ class Minecraft(callbacks.Plugin):
     threaded = True
 
     _statusURL = 'http://status.mojang.com/check'
+    _serviceNames = { 'minecraft.net' : 'Web', 'account.mojang.com' : 'Account web',
+                      'login.minecraft.net' : 'Legacy Login' , 'session.minecraft.net' : 'Legacy Session', 
+                      'auth.mojang.com' : 'Legacy Auth', 'skins.minecraft.net' : 'Skin server',
+                      'authserver.mojang.com' : 'Auth server', 'sessionserver.mojang.com' : 'Session server' }
 
     _mcColors = ["\x0300,\xa7f", "\x0301,\xa70", "\x0302,\xa71", "\x0303,\xa72",
                  "\x0304,\xa7c", "\x0305,\xa74", "\x0306,\xa75", "\x0307,\xa76",
@@ -138,6 +142,15 @@ class Minecraft(callbacks.Plugin):
         """takes no arguments
         Shows the status of the Minecraft/Mojang servers."""
 
+        listMode = False
+        if self.registryValue('listMode'):
+            listMode = True
+
+        boldBanner = '\x02'
+        if not self.registryValue('boldBanner'):
+            boldBanner = ''
+        banner = format("[%s%s%s]", boldBanner, _('Minecraft Status'), boldBanner)
+
         try:
             statusReq = urlopen(self._statusURL)
         except:
@@ -151,30 +164,45 @@ class Minecraft(callbacks.Plugin):
 
             statusRes = json.loads(statusRes)
 
-            status = { 'online': [], 'offline': [] }
-            for i in statusRes:
-                service = list(i.keys())[0]
+            if listMode:
+                status = { 'online': [], 'offline': [] }
 
-                if self.registryValue('shortNames'):
-                    service = service.replace('mojang', 'mj').replace('minecraft', 'mc')
+                for i in statusRes:
+                    if list(i.keys())[0] in self._serviceNames:
+                        service = self._serviceNames[list(i.keys())[0]]
+                    else:
+                        service = list(i.keys())[0]
 
-                if list(i.values())[0] == 'green':
-                    status['online'].append(service)
-                else:
-                    status['offline'].append(service)
+                    if list(i.values())[0] == 'green':
+                        status['online'].append(service)
+                    else:
+                        status['offline'].append(service)
 
-            online = ', '.join(status['online'])
-            offline = ', '.join(status['offline'])
+                online = ', '.join(status['online'])
+                offline = ', '.join(status['offline'])
 
-            irc.reply(format(_("[Minecraft Status] %s%s%s%s%s"),
-                             '\x0303Online\x03: ' if len(online) > 0 else '',
-                             online if len(online) > 0 else '',
-                             ' - ' if len(online) > 0 and len(offline) > 0 else '',
-                             '\x0304Offline\x03: ' if len(offline) > 0 else '',
-                             offline if len(offline) > 0 else ''
-                         ), prefixNick=False)
+                irc.reply(format("%s %s%s%s%s%s",
+                                 banner,
+                                 '\x0303Online\x03: ' if len(online) > 0 else '',
+                                 online if len(online) > 0 else '',
+                                 ' - ' if len(online) > 0 and len(offline) > 0 else '',
+                                 '\x0304Offline\x03: ' if len(offline) > 0 else '',
+                                 offline if len(offline) > 0 else ''
+                             ), prefixNick=False)
+            else:
+                status = []
+
+                for i in statusRes:
+                    if list(i.keys())[0] in self._serviceNames:
+                        service = self._serviceNames[list(i.keys())[0]]
+                    else:
+                        service = list(i.keys())[0]
+
+                    status.append(format('\x03%s%s\x03', '03' if list(i.values())[0] == 'green' else '04', service))
+
+                irc.reply(format("%s %s", banner, ' | '.join(status)))
         else:
-            irc.reply(_("[Minecraft Status] Status checker is down! Maybe other Minecraft/Mojang services are affected too."), prefixNick=False)
+            irc.reply(format(_("%s Status checker is down! Maybe other Minecraft/Mojang services are affected too."), banner), prefixNick=False)
 
     mcs = mcstatus = wrap(mcstatus)
 
