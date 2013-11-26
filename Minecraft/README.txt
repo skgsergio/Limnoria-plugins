@@ -1,3 +1,6 @@
+Gets Minecraft/Mojang servers status (login, sesion, auth, ...).
+Gets info from a Minecraft server (users, name, ...).
+
 Public commands:
 	mcstatus, mcs ->
 		Gets Minecraft/Mojang servers status (login, sesion, auth, ...).
