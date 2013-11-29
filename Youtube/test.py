@@ -33,7 +33,7 @@ from supybot.test import *
 class YoutubeTestCase(ChannelPluginTestCase):
     plugins = ('Youtube',)
     timeout = 10
-    ytRegexp = 'YouTube: Freddie Mercury Google Doodle - 0:01:39 - \d+ likes / \d+ dislikes - user: .+ - date: .+'
+    ytRegexp = '\x02YouTube\x02: Freddie Mercury Google Doodle - 0:01:39 - \d+ likes / \d+ dislikes - user: .+ - date: .+'
     if network:
         def testYoutubeSnarferSort(self):
             try:

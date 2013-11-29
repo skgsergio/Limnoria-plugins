@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2013-11-29 18:22+CET\n"
+"POT-Creation-Date: 2013-11-29 18:59+CET\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,10 +22,36 @@ msgid ""
 "             snarfer to be enabled?"
 msgstr ""
 
+#: config.py:47
+msgid "Do you want to show the video uploader username?"
+msgstr ""
+
 #: config.py:51
+msgid "Do you want to show the video upload date?"
+msgstr ""
+
+#: config.py:55
 msgid ""
-"Determines whether the bot will output the\n"
-"    Youtube videos it sees in the channel."
+"Do you want to use the old rating system (x of 5.0) instead\n"
+"    of the like/dislike system?"
+msgstr ""
+
+#: config.py:63
+msgid "Enable Youtube snarfer."
+msgstr ""
+
+#: config.py:66
+msgid "Show video uploader."
+msgstr ""
+
+#: config.py:69
+msgid "Show video upload date."
+msgstr ""
+
+#: config.py:72
+msgid ""
+"Use old rating system (x of 5.0) instead of\n"
+"    the like/dislike system."
 msgstr ""
 
 #: plugin.py:62
@@ -33,27 +59,23 @@ msgstr ""
 msgid "Listens for Youtube URLs and retrieves video info."
 msgstr ""
 
-#: plugin.py:105
-msgid "YouTube: %s"
-msgstr ""
-
-#: plugin.py:108
-msgid " - %s"
-msgstr ""
-
-#: plugin.py:112
+#: plugin.py:115
 msgid " - %s views"
 msgstr ""
 
-#: plugin.py:115
+#: plugin.py:119
 msgid " - %s likes / %s dislikes"
 msgstr ""
 
-#: plugin.py:125
-msgid " - user: %s"
+#: plugin.py:124
+msgid " - %.1f/5.0 (%s ratings)"
 msgstr ""
 
 #: plugin.py:129
+msgid " - user: %s"
+msgstr ""
+
+#: plugin.py:133
 msgid " - date: %s"
 msgstr ""
 

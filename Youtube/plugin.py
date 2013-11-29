@@ -102,35 +102,36 @@ class Youtube(callbacks.PluginRegexp):
                     if 'data' in apiRes:
                         vInfo = apiRes['data']
 
-                        s = format(_("YouTube: %s"), vInfo['title'])
+                        s = format("\x02YouTube\x02: %s", vInfo['title'])
+
+                        if 'contentRating' in vInfo:
+                            s += " \x02[NSFW]\x02"
 
                         if 'duration' in vInfo:
-                            s += format(_(" - %s"),
+                            s += format(" - %s",
                                         str(timedelta(seconds=int(vInfo['duration']))))
 
                         if 'viewCount' in vInfo:
                             s += format(_(" - %s views"), "{:,}".format(vInfo['viewCount']))
 
-                        if 'likeCount' in vInfo and 'ratingCount' in vInfo:
-                            s += format(_(" - %s likes / %s dislikes"),
-                                        vInfo['likeCount'],
-                                        int(vInfo['ratingCount']) - int(vInfo['likeCount']))
-                        """
-                        if 'rating' in vInfo:
-                            s += format(_(" - %.1f/5.0 (%s ratings)"),
-                                        vInfo['rating'],
-                                        vInfo['ratingCount'])
-                        """
-                        if 'uploader' in vInfo:
+                        if not self.registryValue('useRating', channel):
+                            if 'likeCount' in vInfo and 'ratingCount' in vInfo:
+                                s += format(_(" - %s likes / %s dislikes"),
+                                            vInfo['likeCount'],
+                                            int(vInfo['ratingCount']) - int(vInfo['likeCount']))
+                        else:
+                            if 'rating' in vInfo:
+                                s += format(_(" - %.1f/5.0 (%s ratings)"),
+                                            vInfo['rating'],
+                                            vInfo['ratingCount'])
+
+                        if 'uploader' in vInfo and self.registryValue('showUploader', channel):
                             s += format(_(" - user: %s"),
                                         vInfo['uploader'])
 
-                        if 'uploaded' in vInfo:
+                        if 'uploaded' in vInfo and self.registryValue('showDate', channel):
                             s += format(_(" - date: %s"),
                                         parser.parse(vInfo['uploaded']).astimezone(tz.tzlocal()))
-
-                        if 'contentRating' in vInfo:
-                            s += " - NSFW!"
 
                         irc.reply(s, prefixNick=False)
 

@@ -39,16 +39,37 @@ except:
 def configure(advanced):
     from supybot.questions import expect, anything, something, yn
     conf.registerPlugin('Youtube', True)
-    if yn(_("""This plugin offers a snarfer that will try to fetch info about
+    if not yn(_("""This plugin offers a snarfer that will try to fetch info about
              Youtube videos that it sees in the channel. Would you like this
              snarfer to be enabled?"""), default=True):
-        Youtube.youtubeSnarfer.setValue(True)
-    else:
         Youtube.youtubeSnarfer.setValue(False)
 
+    if not yn(_("""Do you want to show the video uploader username?"""),
+              default=True):
+        Youtube.showUploader.setValue(False)
+
+    if not yn(_("""Do you want to show the video upload date?"""),
+              default=True):
+        Youtube.showDate.setValue(False)
+
+    if yn(_("""Do you want to use the old rating system (x of 5.0) instead
+    of the like/dislike system?"""),
+              default=False):
+        Youtube.showDate.setValue(True)
+
 Youtube = conf.registerPlugin('Youtube')
+
 conf.registerChannelValue(Youtube, 'youtubeSnarfer',
-    registry.Boolean(True, _("""Determines whether the bot will output the
-    Youtube videos it sees in the channel.""")))
+    registry.Boolean(True, _("""Enable Youtube snarfer.""")))
+
+conf.registerChannelValue(Youtube, 'showUploader',
+    registry.Boolean(True, _("""Show video uploader.""")))
+
+conf.registerChannelValue(Youtube, 'showDate',
+    registry.Boolean(True, _("""Show video upload date.""")))
+
+conf.registerChannelValue(Youtube, 'useRating',
+    registry.Boolean(False, _("""Use old rating system (x of 5.0) instead of
+    the like/dislike system.""")))
 
 # vim:set shiftwidth=4 tabstop=4 expandtab textwidth=79:
