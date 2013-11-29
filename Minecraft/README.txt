@@ -18,5 +18,5 @@ Config:
 		Example when False (all elements have color, green if online and red if offline):
 			[Minecraft Status] Web | ... | Session server
 
-	supybot.plugins.Minecraft.listMode (default: True) ->
+	supybot.plugins.Minecraft.boldBanner (default: True) ->
 		Use bold banner (the "Minecraft Status" part in the previous examples).
