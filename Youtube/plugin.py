@@ -111,11 +111,16 @@ class Youtube(callbacks.PluginRegexp):
                         if 'viewCount' in vInfo:
                             s += format(_(" - %s views"), "{:,}".format(vInfo['viewCount']))
 
+                        if 'likeCount' in vInfo and 'ratingCount' in vInfo:
+                            s += format(_(" - %s likes / %s dislikes"),
+                                        vInfo['likeCount'],
+                                        int(vInfo['ratingCount']) - int(vInfo['likeCount']))
+                        """
                         if 'rating' in vInfo:
                             s += format(_(" - %.1f/5.0 (%s ratings)"),
                                         vInfo['rating'],
                                         vInfo['ratingCount'])
-
+                        """
                         if 'uploader' in vInfo:
                             s += format(_(" - user: %s"),
                                         vInfo['uploader'])
