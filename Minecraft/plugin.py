@@ -34,13 +34,7 @@ import json
 import socket
 import struct
 
-import supybot.log as log
-import supybot.conf as conf
-import supybot.utils as utils
 from supybot.commands import *
-import supybot.ircmsgs as ircmsgs
-import supybot.plugins as plugins
-import supybot.ircutils as ircutils
 import supybot.callbacks as callbacks
 
 if sys.version_info[0] < 3:
