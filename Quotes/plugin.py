@@ -96,7 +96,7 @@ class SqliteQuotesDB(object):
     def searchQuote(self, channel, text):
         db = self._getDb(channel)
         cur = db.cursor()
-        cur.execute("""SELECT rowid FROM quotes WHERE text MATCH ?""", (text,))
+        cur.execute("""SELECT rowid FROM quotes WHERE text MATCH ?""", ('*' + text + '*',))
         return [str(i[0]) for i in cur.fetchall()]
 
     def insertQuote(self, channel, text, nick, ts):
