@@ -63,16 +63,19 @@ class Youtube(callbacks.PluginRegexp):
 
     def _youtubeId(self, value):
         query = urlparse(value)
+        yid = None
         if query.hostname == 'youtu.be':
-            return query.path[1:]
+            yid = query.path[1:]
         elif query.hostname in ('www.youtube.com', 'youtube.com'):
             if query.path == '/watch':
-                return parse_qs(query.query)['v'][0]
+                yid = parse_qs(query.query)['v'][0]
             elif query.path[:7] == '/embed/' or query.path[:3] == '/v/':
-                return query.path.split('/')[2]
+                yid = query.path.split('/')[2]
+        elif query.hostname == 'm.youtube.com' and query.path == '/watch':
+            yid = parse_qs(query.query)['v'][0]
         elif query.hostname == 'youtube.googleapis.com' and query.path[:3] == '/v/':
-            return query.path.split('/')[2]
-        return None
+            yid = query.path.split('/')[2]
+        return yid
 
     def youtubeSnarfer(self, irc, msg, match):
         channel = msg.args[0]
