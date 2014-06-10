@@ -59,11 +59,11 @@ class Minecraft(callbacks.Plugin):
     threaded = True
 
     _statusURL = 'http://status.mojang.com/check'
-    _serviceNames = { 'minecraft.net' : 'Website', 'account.mojang.com' : 'Account web',
-                      'login.minecraft.net' : 'Legacy Login' , 'session.minecraft.net' : 'Legacy Session', 
-                      'auth.mojang.com' : 'Legacy Auth', 'skins.minecraft.net' : 'Skin server',
-                      'authserver.mojang.com' : 'Auth server', 'sessionserver.mojang.com' : 'Session server',
-                      'api.mojang.com' : 'API', 'textures.minecraft.net' : 'Textures' }
+    _serviceNames = { 'minecraft.net' : _('Website'), 'account.mojang.com' : _('Account web'),
+                      'login.minecraft.net' : _('Legacy Login') , 'session.minecraft.net' : _('Legacy Session'),
+                      'auth.mojang.com' : _('Legacy Auth'), 'skins.minecraft.net' : _('Skin server'),
+                      'authserver.mojang.com' : _('Auth server'), 'sessionserver.mojang.com' : _('Session server'),
+                      'api.mojang.com' : _('API'), 'textures.minecraft.net' : _('Textures') }
 
     _mcColors = ["\x0300,\xa7f", "\x0301,\xa70", "\x0302,\xa71", "\x0303,\xa72",
                  "\x0304,\xa7c", "\x0305,\xa74", "\x0306,\xa75", "\x0307,\xa76",

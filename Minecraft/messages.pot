@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2013-11-23 17:46+CET\n"
+"POT-Creation-Date: 2014-06-10 22:54+CEST\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -36,52 +36,92 @@ msgstr ""
 msgid "Use bold plugin banner."
 msgstr ""
 
-#: plugin.py:63
+#: plugin.py:57
 #, docstring
 msgid ""
 "Gets Minecraft/Mojang servers status (login, sesion, auth, ...).\n"
 "    Gets info from a Minecraft server (users, name, ...)."
 msgstr ""
 
-#: plugin.py:90
+#: plugin.py:62
+msgid "Account web"
+msgstr ""
+
+#: plugin.py:62
+msgid "Website"
+msgstr ""
+
+#: plugin.py:63
+msgid "Legacy Login"
+msgstr ""
+
+#: plugin.py:63
+msgid "Legacy Session"
+msgstr ""
+
+#: plugin.py:64
+msgid "Legacy Auth"
+msgstr ""
+
+#: plugin.py:64
+msgid "Skin server"
+msgstr ""
+
+#: plugin.py:65
+msgid "Auth server"
+msgstr ""
+
+#: plugin.py:65
+msgid "Session server"
+msgstr ""
+
+#: plugin.py:66
+msgid "API"
+msgstr ""
+
+#: plugin.py:66
+msgid "Textures"
+msgstr ""
+
+#: plugin.py:85
 #, docstring
 msgid ""
 "<host|host:port>\n"
 "        Asks for Minecraft server information. Host can be a domain or an IP."
 msgstr ""
 
-#: plugin.py:103
+#: plugin.py:98
 msgid "Invalid port."
 msgstr ""
 
-#: plugin.py:119
+#: plugin.py:114
 msgid "Server error or not a Minecraft server."
 msgstr ""
 
-#: plugin.py:128
+#: plugin.py:123
 msgid "%s - %s/%s players"
 msgstr ""
 
-#: plugin.py:131
+#: plugin.py:126
 msgid "%s\017 - %s - %s/%s players"
 msgstr ""
 
-#: plugin.py:137
+#: plugin.py:132
 msgid "Couldn't connect to server."
 msgstr ""
 
-#: plugin.py:142
+#: plugin.py:137
 #, docstring
 msgid ""
 "takes no arguments\n"
 "        Shows the status of the Minecraft/Mojang servers."
 msgstr ""
 
-#: plugin.py:152
+#: plugin.py:147
 msgid "Minecraft Status"
 msgstr ""
 
-#: plugin.py:205
+#: plugin.py:200
 msgid "%s Status checker is down! Maybe other Minecraft/Mojang services are affected too."
 msgstr ""
 
