@@ -11,6 +11,9 @@ Public commands:
 	findquote [--channel <#channel>] [<id>] ->
 		Search quotes in the #channel database containing 'text'.
 
+	lastquote [--channel <#channel>] ->
+		Get the last quote from #channel database.
+
 	quote [--channel <#channel>] [<id>] ->
 		Get a random quote or the quote number 'id' from #channel database.
 

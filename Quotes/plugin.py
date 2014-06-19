@@ -93,6 +93,12 @@ class SqliteQuotesDB(object):
         cur.execute("""SELECT rowid, text, nick, ts FROM quotes ORDER BY RANDOM() LIMIT 1""")
         return cur.fetchone()
 
+    def getQuoteLast(self, channel):
+        db = self._getDb(channel)
+        cur = db.cursor()
+        cur.execute("""SELECT rowid, text, nick, ts FROM quotes ORDER BY rowid DESC LIMIT 1""")
+        return cur.fetchone()
+
     def searchQuote(self, channel, text):
         db = self._getDb(channel)
         cur = db.cursor()
@@ -197,6 +203,26 @@ class Quotes(callbacks.Plugin):
             irc.error(format(_("There is no quotes in %s's database."), channel))
 
     quote = wrap(quote, [getopts({'channel': 'somethingWithoutSpaces'}), optional('int')])
+
+    def lastquote(self, irc, msg, args, optlist):
+        """[--channel <#channel>]
+        Get the last quote. --channel is supplied the quote is fetched from that
+        channel database."""
+        channel = msg.args[0]
+        for (option, arg) in optlist:
+            if option == 'channel':
+                if not ircutils.isChannel(arg):
+                    irc.error(format(_('%s is not a valid channel.'), arg), Raise=True)
+                channel = arg
+
+        q = self.db.getQuoteLast(channel)
+
+        if q != None:
+            irc.reply(format("#%s: %s", q[0], q[1]), noLengthCheck=True)
+        else:
+            irc.error(format(_("There is no quotes in %s's database."), channel))
+
+    lastquote = wrap(lastquote, [getopts({'channel': 'somethingWithoutSpaces'})])
 
     def findquote(self, irc, msg, args, optlist, text):
         """[--channel <#channel>] [<id>]

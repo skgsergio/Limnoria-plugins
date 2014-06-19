@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-04-26 16:47+CEST\n"
+"POT-Creation-Date: 2014-06-19 14:00+CEST\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,12 +19,12 @@ msgstr ""
 msgid "Enable quotes on the channel."
 msgstr ""
 
-#: plugin.py:118
+#: plugin.py:124
 #, docstring
 msgid "Simple quote system"
 msgstr ""
 
-#: plugin.py:129
+#: plugin.py:135
 #, docstring
 msgid ""
 "[--channel <#channel>] <text>\n"
@@ -33,15 +33,16 @@ msgid ""
 "        If --channel is supplied the quote is stored in that channel database."
 msgstr ""
 
-#: plugin.py:137 plugin.py:154 plugin.py:184 plugin.py:209 plugin.py:232
+#: plugin.py:143 plugin.py:160 plugin.py:190 plugin.py:215 plugin.py:235
+#: plugin.py:258
 msgid "%s is not a valid channel."
 msgstr ""
 
-#: plugin.py:141
+#: plugin.py:147
 msgid "Quote inserted with id: %s"
 msgstr ""
 
-#: plugin.py:146
+#: plugin.py:152
 #, docstring
 msgid ""
 "[--channel <#channel>] <id>\n"
@@ -50,19 +51,19 @@ msgid ""
 "        quote is fetched from that channel database."
 msgstr ""
 
-#: plugin.py:168
+#: plugin.py:174
 msgid "This quote only can be deleted by %s or an admin."
 msgstr ""
 
-#: plugin.py:170
+#: plugin.py:176
 msgid "Too late, it has already passed 5 minutes. Ask an admin."
 msgstr ""
 
-#: plugin.py:172 plugin.py:195 plugin.py:241
+#: plugin.py:178 plugin.py:201 plugin.py:267
 msgid "No such quote %s in %s's database."
 msgstr ""
 
-#: plugin.py:177
+#: plugin.py:183
 #, docstring
 msgid ""
 "[--channel <#channel>] [<id>]\n"
@@ -70,11 +71,19 @@ msgid ""
 "        the quote is fetched from that channel database."
 msgstr ""
 
-#: plugin.py:197
+#: plugin.py:203 plugin.py:223
 msgid "There is no quotes in %s's database."
 msgstr ""
 
-#: plugin.py:202
+#: plugin.py:208
+#, docstring
+msgid ""
+"[--channel <#channel>]\n"
+"        Get the last quote. --channel is supplied the quote is fetched from that\n"
+"        channel database."
+msgstr ""
+
+#: plugin.py:228
 #, docstring
 msgid ""
 "[--channel <#channel>] [<id>]\n"
@@ -82,11 +91,11 @@ msgid ""
 "        the quote is fetched from that channel database."
 msgstr ""
 
-#: plugin.py:220
+#: plugin.py:246
 msgid "There is no quote that contains '%s'"
 msgstr ""
 
-#: plugin.py:225
+#: plugin.py:251
 #, docstring
 msgid ""
 "[--channel <#channel>] <id>\n"
