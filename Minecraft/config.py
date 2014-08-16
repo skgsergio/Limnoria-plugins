@@ -34,26 +34,29 @@ try:
     from supybot.i18n import PluginInternationalization
     _ = PluginInternationalization('Minecraft')
 except:
-    _ = lambda x:x
+    _ = lambda x: x
+
 
 def configure(advanced):
-    from supybot.questions import expect, anything, something, yn
+    from supybot.questions import yn
     conf.registerPlugin('Minecraft', True)
 
     if yn(_("""Do you want to use list mode instead colorful mode?
              (colorful mode uses color per service, list mode prints
-              two list, one with the onlines other with the offlines)"""), default=False):
+              two list, one with the onlines other with the offlines)"""),
+          default=False):
         Minecraft.listMode.setValue(True)
 
-    if not yn(_("""Do you want the plugin banner to be bold?"""), default=True):
+    if not yn(_("""Do you want the plugin banner to be bold?"""),
+              default=True):
         Minecraft.boldBanner.setValue(False)
 
 Minecraft = conf.registerPlugin('Minecraft')
 conf.registerChannelValue(Minecraft, 'listMode',
-    registry.Boolean(False, _("""Use two lists of services (online and offline) to output
-    minimal colors.""")))
+                          registry.Boolean(False, _("""Use two lists of services
+                          (online and offline) to output minimal colors.""")))
 
 conf.registerChannelValue(Minecraft, 'boldBanner',
-    registry.Boolean(True, _("""Use bold plugin banner.""")))
+                          registry.Boolean(True, _("Use bold plugin banner.")))
 
 # vim:set shiftwidth=4 tabstop=4 expandtab textwidth=79:

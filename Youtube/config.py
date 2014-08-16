@@ -34,10 +34,11 @@ try:
     from supybot.i18n import PluginInternationalization
     _ = PluginInternationalization('Youtube')
 except:
-    _ = lambda x:x
+    _ = lambda x: x
+
 
 def configure(advanced):
-    from supybot.questions import expect, anything, something, yn
+    from supybot.questions import yn
     conf.registerPlugin('Youtube', True)
     if not yn(_("""This plugin offers a snarfer that will try to fetch info about
              Youtube videos that it sees in the channel. Would you like this
@@ -54,22 +55,25 @@ def configure(advanced):
 
     if yn(_("""Do you want to use the old rating system (x of 5.0) instead
     of the like/dislike system?"""),
-              default=False):
+          default=False):
         Youtube.showDate.setValue(True)
 
 Youtube = conf.registerPlugin('Youtube')
 
 conf.registerChannelValue(Youtube, 'youtubeSnarfer',
-    registry.Boolean(True, _("""Enable Youtube snarfer.""")))
+                          registry.Boolean(True,
+                                           _("""Enable Youtube snarfer.""")))
 
 conf.registerChannelValue(Youtube, 'showUploader',
-    registry.Boolean(True, _("""Show video uploader.""")))
+                          registry.Boolean(True,
+                                           _("""Show video uploader.""")))
 
 conf.registerChannelValue(Youtube, 'showDate',
-    registry.Boolean(True, _("""Show video upload date.""")))
+                          registry.Boolean(True,
+                                           _("""Show video upload date.""")))
 
 conf.registerChannelValue(Youtube, 'useRating',
-    registry.Boolean(False, _("""Use old rating system (x of 5.0) instead of
-    the like/dislike system.""")))
+                          registry.Boolean(False, _("""Use old rating system (x of 5.0) instead of
+                          the like/dislike system.""")))
 
 # vim:set shiftwidth=4 tabstop=4 expandtab textwidth=79:

@@ -50,16 +50,17 @@ try:
     from supybot.i18n import internationalizeDocstring
     _ = PluginInternationalization('Youtube')
 except:
-    _ = lambda x:x
-    internationalizeDocstring = lambda x:x
+    _ = lambda x: x
+    internationalizeDocstring = lambda x: x
+
 
 @internationalizeDocstring
 class Youtube(callbacks.PluginRegexp):
     """Listens for Youtube URLs and retrieves video info."""
     threaded = True
-    regexps  = ['youtubeSnarfer']
+    regexps = ['youtubeSnarfer']
 
-    _apiUrl   = 'http://gdata.youtube.com/feeds/api/videos/{}?v=2&alt=jsonc'
+    _apiUrl = 'http://gdata.youtube.com/feeds/api/videos/{}?v=2&alt=jsonc'
 
     def _youtubeId(self, value):
         query = urlparse(value)
@@ -69,11 +70,14 @@ class Youtube(callbacks.PluginRegexp):
         elif query.hostname in ('www.youtube.com', 'youtube.com'):
             if query.path == '/watch':
                 yid = parse_qs(query.query)['v'][0]
-            elif query.path[:7] == '/embed/' or query.path[:3] == '/v/':
+            elif (query.path[:7] == '/embed/'
+                  or query.path[:3] == '/v/'):
                 yid = query.path.split('/')[2]
-        elif query.hostname == 'm.youtube.com' and query.path == '/watch':
+        elif (query.hostname == 'm.youtube.com'
+              and query.path == '/watch'):
             yid = parse_qs(query.query)['v'][0]
-        elif query.hostname == 'youtube.googleapis.com' and query.path[:3] == '/v/':
+        elif (query.hostname == 'youtube.googleapis.com'
+              and query.path[:3] == '/v/'):
             yid = query.path.split('/')[2]
         return yid
 
@@ -94,7 +98,8 @@ class Youtube(callbacks.PluginRegexp):
                     if sys.version_info[0] < 3:
                         apiRes = apiReq.read()
                     else:
-                        apiRes = apiReq.read().decode(apiReq.headers.get_content_charset())
+                        cntCharset = apiReq.headers.get_content_charset()
+                        apiRes = apiReq.read().decode(cntCharset)
 
                     apiRes = json.loads(apiRes)
 
@@ -107,30 +112,35 @@ class Youtube(callbacks.PluginRegexp):
                             s += " \x02[NSFW]\x02"
 
                         if 'duration' in vInfo:
-                            s += format(" - %s",
-                                        str(timedelta(seconds=int(vInfo['duration']))))
+                            s += format(" - %s", str(timedelta(
+                                seconds=int(vInfo['duration']))))
 
                         if 'viewCount' in vInfo:
-                            s += format(_(" - %s views"), "{:,}".format(vInfo['viewCount']))
+                            s += format(_(" - %s views"),
+                                        "{:,}".format(vInfo['viewCount']))
 
                         if not self.registryValue('useRating', channel):
                             if 'likeCount' in vInfo and 'ratingCount' in vInfo:
                                 s += format(_(" - %s likes / %s dislikes"),
                                             vInfo['likeCount'],
-                                            int(vInfo['ratingCount']) - int(vInfo['likeCount']))
+                                            (int(vInfo['ratingCount']) -
+                                             int(vInfo['likeCount'])))
                         else:
                             if 'rating' in vInfo:
                                 s += format(_(" - %.1f/5.0 (%s ratings)"),
                                             vInfo['rating'],
                                             vInfo['ratingCount'])
 
-                        if 'uploader' in vInfo and self.registryValue('showUploader', channel):
+                        if ('uploader' in vInfo
+                            and self.registryValue('showUploader', channel)):
                             s += format(_(" - user: %s"),
                                         vInfo['uploader'])
 
-                        if 'uploaded' in vInfo and self.registryValue('showDate', channel):
+                        if ('uploaded' in vInfo
+                            and self.registryValue('showDate', channel)):
                             s += format(_(" - date: %s"),
-                                        parser.parse(vInfo['uploaded']).astimezone(tz.tzlocal()))
+                                        parser.parse(vInfo['uploaded'])
+                                        .astimezone(tz.tzlocal()))
 
                         irc.reply(s, prefixNick=False)
 

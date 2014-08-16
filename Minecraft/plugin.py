@@ -38,10 +38,8 @@ from supybot.commands import *
 import supybot.callbacks as callbacks
 
 if sys.version_info[0] < 3:
-    from urlparse import urlparse, parse_qs
     from urllib2 import urlopen
 else:
-    from urllib.parse import urlparse, parse_qs
     from urllib.request import urlopen
 
 try:
@@ -49,8 +47,9 @@ try:
     from supybot.i18n import internationalizeDocstring
     _ = PluginInternationalization('Minecraft')
 except:
-    _ = lambda x:x
-    internationalizeDocstring = lambda x:x
+    _ = lambda x: x
+    internationalizeDocstring = lambda x: x
+
 
 @internationalizeDocstring
 class Minecraft(callbacks.Plugin):
@@ -59,17 +58,27 @@ class Minecraft(callbacks.Plugin):
     threaded = True
 
     _statusURL = 'http://status.mojang.com/check'
-    _serviceNames = { 'minecraft.net' : _('Website'), 'account.mojang.com' : _('Account web'),
-                      'login.minecraft.net' : _('Legacy Login') , 'session.minecraft.net' : _('Legacy Session'),
-                      'auth.mojang.com' : _('Legacy Auth'), 'skins.minecraft.net' : _('Skin server'),
-                      'authserver.mojang.com' : _('Auth server'), 'sessionserver.mojang.com' : _('Session server'),
-                      'api.mojang.com' : _('API'), 'textures.minecraft.net' : _('Textures') }
+    _serviceNames = {'minecraft.net': _('Website'),
+                     'account.mojang.com': _('Account web'),
+                     'login.minecraft.net': _('Legacy Login'),
+                     'session.minecraft.net': _('Legacy Session'),
+                     'auth.mojang.com': _('Legacy Auth'),
+                     'skins.minecraft.net': _('Skin server'),
+                     'authserver.mojang.com': _('Auth server'),
+                     'sessionserver.mojang.com': _('Session server'),
+                     'api.mojang.com': _('API'),
+                     'textures.minecraft.net': _('Textures')}
 
-    _mcColors = ["\x0300,\xa7f", "\x0301,\xa70", "\x0302,\xa71", "\x0303,\xa72",
-                 "\x0304,\xa7c", "\x0305,\xa74", "\x0306,\xa75", "\x0307,\xa76",
-                 "\x0308,\xa7e", "\x0309,\xa7a", "\x0310,\xa73", "\x0311,\xa7b",
-                 "\x0312,\xa71", "\x0313,\xa7d", "\x0314,\xa78", "\x0315,\xa77",
-                 "\x02,\xa7l", "\x0310,\xa79", "\x09,\xa7o", "\x13,\xa7m",
+    _mcColors = ["\x0300,\xa7f", "\x0301,\xa70",
+                 "\x0302,\xa71", "\x0303,\xa72",
+                 "\x0304,\xa7c", "\x0305,\xa74",
+                 "\x0306,\xa75", "\x0307,\xa76",
+                 "\x0308,\xa7e", "\x0309,\xa7a",
+                 "\x0310,\xa73", "\x0311,\xa7b",
+                 "\x0312,\xa71", "\x0313,\xa7d",
+                 "\x0314,\xa78", "\x0315,\xa77",
+                 "\x02,\xa7l", "\x0310,\xa79",
+                 "\x09,\xa7o", "\x13,\xa7m",
                  "\x0f,\xa7r", "\x15,\xa7n"]
 
     def _parseMcStyle(self, msg):
@@ -79,11 +88,13 @@ class Minecraft(callbacks.Plugin):
         return msg.replace('\xa7k', '')
 
     def _toLenAndUtf16(self, string):
-        return bytes(struct.pack(str('!h'), len(string))) + bytes(string.encode('utf-16be'))
+        return (bytes(struct.pack(str('!h'), len(string))) +
+                bytes(string.encode('utf-16be')))
 
     def mc(self, irc, msg, args, server):
         """<host|host:port>
-        Asks for Minecraft server information. Host can be a domain or an IP."""
+        Asks for Minecraft server information.
+        Host can be a domain or an IP."""
         if ":" in server:
             host, port = server.split(":", 1)
             try:
@@ -101,7 +112,7 @@ class Minecraft(callbacks.Plugin):
             try:
                 sock.connect((host, port))
 
-                # Minecraft Handshake: For more info see http://wiki.vg/Server_List_Ping
+                # Minecraft Handshake. http://wiki.vg/Server_List_Ping
                 sock.send(b'\xfe\x01\xfa')
                 sock.send(self._toLenAndUtf16('MC|PingHost'))
                 sock.send(bytes(struct.pack(str('!h'), 7 + 2*len(host))))
@@ -118,11 +129,11 @@ class Minecraft(callbacks.Plugin):
                 values = sock.recv(length * 2).decode('utf-16be')
 
                 data = values.split('\x00')
-                if len(data) == 1: # 1.8-Beta to 1.3
+                if len(data) == 1:  # 1.8-Beta to 1.3
                     data = values.split('\xa7')
                     message = format(_("%s - %s/%s players"),
                                      data[0], data[1], data[2])
-                else: # 1.4 to 1.6 (1.7 it's supported too, it have a protocol but supports old)
+                else:  # 1.4 to 1.6 (1.7+ have a protocol but supports old)
                     message = format(_("%s\x0f - %s - %s/%s players"),
                                      data[3], data[2], data[4], data[5])
 
@@ -144,7 +155,8 @@ class Minecraft(callbacks.Plugin):
         boldBanner = '\x02'
         if not self.registryValue('boldBanner'):
             boldBanner = ''
-        banner = format("[%s%s%s]", boldBanner, _('Minecraft Status'), boldBanner)
+        banner = format("[%s%s%s]", boldBanner,
+                        _('Minecraft Status'), boldBanner)
 
         try:
             statusReq = urlopen(self._statusURL)
@@ -155,12 +167,13 @@ class Minecraft(callbacks.Plugin):
             if sys.version_info[0] < 3:
                 statusRes = statusReq.read()
             else:
-                statusRes = statusReq.read().decode(statusReq.headers.get_content_charset())
+                statusRes = (statusReq.read()
+                             .decode(statusReq.headers.get_content_charset()))
 
             statusRes = json.loads(statusRes)
 
             if listMode:
-                status = { 'online': [], 'offline': [] }
+                status = {'online': [], 'offline': []}
 
                 for i in statusRes:
                     if list(i.keys())[0] in self._serviceNames:
@@ -178,14 +191,17 @@ class Minecraft(callbacks.Plugin):
 
                 irc.reply(format("%s %s%s%s%s%s",
                                  banner,
-                                 '\x0303Online\x03: ' if len(online) > 0 else '',
+                                 ('\x0303Online\x03: ' if len(online) > 0
+                                  else ''),
                                  online if len(online) > 0 else '',
-                                 ' - ' if len(online) > 0 and len(offline) > 0 else '',
-                                 '\x0304Offline\x03: ' if len(offline) > 0 else '',
-                                 offline if len(offline) > 0 else ''
-                             ), prefixNick=False)
+                                 (' - ' if len(online) > 0 and len(offline) > 0
+                                  else ''),
+                                 ('\x0304Offline\x03: ' if len(offline) > 0
+                                  else ''),
+                                 offline if len(offline) > 0 else ''),
+                          prefixNick=False)
             else:
-                status = []
+                st = []
 
                 for i in statusRes:
                     if list(i.keys())[0] in self._serviceNames:
@@ -193,11 +209,16 @@ class Minecraft(callbacks.Plugin):
                     else:
                         service = list(i.keys())[0]
 
-                    status.append(format('\x03%s%s\x03', '03' if list(i.values())[0] == 'green' else '04', service))
+                    st.append(format('\x03%s%s\x03',
+                                     ('03' if list(i.values())[0] == 'green'
+                                      else '04'),
+                                     service))
 
-                irc.reply(format("%s %s", banner, ' | '.join(status)))
+                irc.reply(format("%s %s", banner, ' | '.join(st)))
         else:
-            irc.reply(format(_("%s Status checker is down! Maybe other Minecraft/Mojang services are affected too."), banner), prefixNick=False)
+            irc.reply(format(_("%s Status checker is down! Maybe other "
+                               "Minecraft/Mojang services are affected too."),
+                             banner), prefixNick=False)
 
     mcs = mcstatus = wrap(mcstatus)
 

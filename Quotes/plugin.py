@@ -44,7 +44,8 @@ try:
     from supybot.i18n import PluginInternationalization
     _ = PluginInternationalization('Quotes')
 except ImportError:
-    _ = lambda x:x
+    _ = lambda x: x
+
 
 class SqliteQuotesDB(object):
     def __init__(self, filename):
@@ -52,7 +53,8 @@ class SqliteQuotesDB(object):
         self.filename = filename
 
     def close(self):
-        for db in (self.dbs.itervalues() if sys.version_info[0] < 3 else self.dbs.values()):
+        for db in (self.dbs.itervalues() if sys.version_info[0] < 3
+                   else self.dbs.values()):
             db.close()
 
     def _getDb(self, channel):
@@ -84,31 +86,36 @@ class SqliteQuotesDB(object):
     def getQuoteById(self, channel, qid):
         db = self._getDb(channel)
         cur = db.cursor()
-        cur.execute("""SELECT rowid, text, nick, ts FROM quotes WHERE rowid = ? LIMIT 1""", (qid,))
+        cur.execute("""SELECT rowid, text, nick, ts FROM quotes
+        WHERE rowid = ? LIMIT 1""", (qid,))
         return cur.fetchone()
 
     def getQuoteRandom(self, channel):
         db = self._getDb(channel)
         cur = db.cursor()
-        cur.execute("""SELECT rowid, text, nick, ts FROM quotes ORDER BY RANDOM() LIMIT 1""")
+        cur.execute("""SELECT rowid, text, nick, ts FROM quotes
+        ORDER BY RANDOM() LIMIT 1""")
         return cur.fetchone()
 
     def getQuoteLast(self, channel):
         db = self._getDb(channel)
         cur = db.cursor()
-        cur.execute("""SELECT rowid, text, nick, ts FROM quotes ORDER BY rowid DESC LIMIT 1""")
+        cur.execute("""SELECT rowid, text, nick, ts FROM quotes
+        ORDER BY rowid DESC LIMIT 1""")
         return cur.fetchone()
 
     def searchQuote(self, channel, text):
         db = self._getDb(channel)
         cur = db.cursor()
-        cur.execute("""SELECT rowid FROM quotes WHERE text MATCH ?""", ('*' + text + '*',))
+        cur.execute("""SELECT rowid FROM quotes
+        WHERE text MATCH ?""", ('*' + text + '*',))
         return [str(i[0]) for i in cur.fetchall()]
 
     def insertQuote(self, channel, text, nick, ts):
         db = self._getDb(channel)
         cur = db.cursor()
-        cur.execute("""INSERT INTO quotes (text, nick, ts) VALUES (?, ?, ?)""", (text, nick, ts,))
+        cur.execute("""INSERT INTO quotes (text, nick, ts)
+        VALUES (?, ?, ?)""", (text, nick, ts,))
         db.commit()
         return cur.lastrowid
 
@@ -119,6 +126,7 @@ class SqliteQuotesDB(object):
         db.commit()
 
 QuotesDB = plugins.DB('Quotes', {'sqlite3': SqliteQuotesDB})
+
 
 class Quotes(callbacks.Plugin):
     """Simple quote system"""
@@ -133,20 +141,22 @@ class Quotes(callbacks.Plugin):
 
     def addquote(self, irc, msg, args, optlist, text):
         """[--channel <#channel>] <text>
-        Inserts a quote in the database. If it gives an error saying '"x"
-        is not valid command' try again with the text between quotes ("text").
-        If --channel is supplied the quote is stored in that channel database."""
+        Inserts a quote in the database. If it gives an error saying '"x" is
+        not valid command' try again with the text between quotes ("text"). If
+        --channel is supplied the quote is stored in that channel database."""
         channel = msg.args[0]
         for (option, arg) in optlist:
             if option == 'channel':
                 if not ircutils.isChannel(arg):
-                    irc.error(format(_('%s is not a valid channel.'), arg), Raise=True)
+                    irc.error(format(_('%s is not a valid channel.'), arg),
+                              Raise=True)
                 channel = arg
 
         qid = self.db.insertQuote(channel, text, msg.nick, int(time.time()))
         irc.reply(format(_("Quote inserted with id: %s"), qid))
 
-    addquote = wrap(addquote, [getopts({'channel': 'somethingWithoutSpaces'}), 'text'])
+    addquote = wrap(addquote,
+                    [getopts({'channel': 'somethingWithoutSpaces'}), 'text'])
 
     def delquote(self, irc, msg, args, optlist, qid):
         """[--channel <#channel>] <id>
@@ -157,12 +167,13 @@ class Quotes(callbacks.Plugin):
         for (option, arg) in optlist:
             if option == 'channel':
                 if not ircutils.isChannel(arg):
-                    irc.error(format(_('%s is not a valid channel.'), arg), Raise=True)
+                    irc.error(format(_('%s is not a valid channel.'), arg),
+                              Raise=True)
                 channel = arg
 
         q = self.db.getQuoteById(channel, qid)
 
-        if q != None:
+        if q is not None:
             if ircdb.checkCapability(msg.prefix, 'admin'):
                 self.db.delQuoteById(channel, qid)
                 irc.replySuccess()
@@ -171,13 +182,17 @@ class Quotes(callbacks.Plugin):
                     self.db.delQuoteById(channel, qid)
                     irc.replySuccess()
                 else:
-                    irc.error(format(_("This quote only can be deleted by %s or an admin."), q[2]))
+                    irc.error(format(_("This quote only can be deleted by %s "
+                                       "or an admin."), q[2]))
             else:
-                irc.error(format(_("Too late, it has already passed 5 minutes. Ask an admin."), qid, channel))
+                irc.error(format(_("Too late, it has already passed 5 minutes."
+                                   " Ask an admin."), qid, channel))
         else:
-            irc.error(format(_("No such quote %s in %s's database."), qid, channel))
+            irc.error(format(_("No such quote %s in %s's database."),
+                             qid, channel))
 
-    delquote = wrap(delquote, [getopts({'channel': 'somethingWithoutSpaces'}), 'int'])
+    delquote = wrap(delquote,
+                    [getopts({'channel': 'somethingWithoutSpaces'}), 'int'])
 
     def quote(self, irc, msg, args, optlist, qid):
         """[--channel <#channel>] [<id>]
@@ -187,42 +202,50 @@ class Quotes(callbacks.Plugin):
         for (option, arg) in optlist:
             if option == 'channel':
                 if not ircutils.isChannel(arg):
-                    irc.error(format(_('%s is not a valid channel.'), arg), Raise=True)
+                    irc.error(format(_('%s is not a valid channel.'), arg),
+                              Raise=True)
                 channel = arg
 
-        if qid != None:
+        if qid is not None:
             q = self.db.getQuoteById(channel, qid)
         else:
             q = self.db.getQuoteRandom(channel)
 
-        if q != None:
+        if q is not None:
             irc.reply(format("#%s: %s", q[0], q[1]), noLengthCheck=True)
-        elif qid != None:
-            irc.error(format(_("No such quote %s in %s's database."), qid, channel))
+        elif qid is not None:
+            irc.error(format(_("No such quote %s in %s's database."),
+                             qid, channel))
         else:
-            irc.error(format(_("There is no quotes in %s's database."), channel))
+            irc.error(format(_("There is no quotes in %s's database."),
+                             channel))
 
-    quote = wrap(quote, [getopts({'channel': 'somethingWithoutSpaces'}), optional('int')])
+    quote = wrap(quote,
+                 [getopts({'channel': 'somethingWithoutSpaces'}),
+                  optional('int')])
 
     def lastquote(self, irc, msg, args, optlist):
         """[--channel <#channel>]
-        Get the last quote. --channel is supplied the quote is fetched from that
-        channel database."""
+        Get the last quote. --channel is supplied the quote is fetched from
+        that channel database."""
         channel = msg.args[0]
         for (option, arg) in optlist:
             if option == 'channel':
                 if not ircutils.isChannel(arg):
-                    irc.error(format(_('%s is not a valid channel.'), arg), Raise=True)
+                    irc.error(format(_('%s is not a valid channel.'), arg),
+                              Raise=True)
                 channel = arg
 
         q = self.db.getQuoteLast(channel)
 
-        if q != None:
+        if q is not None:
             irc.reply(format("#%s: %s", q[0], q[1]), noLengthCheck=True)
         else:
-            irc.error(format(_("There is no quotes in %s's database."), channel))
+            irc.error(format(_("There is no quotes in %s's database."),
+                             channel))
 
-    lastquote = wrap(lastquote, [getopts({'channel': 'somethingWithoutSpaces'})])
+    lastquote = wrap(lastquote,
+                     [getopts({'channel': 'somethingWithoutSpaces'})])
 
     def findquote(self, irc, msg, args, optlist, text):
         """[--channel <#channel>] [<id>]
@@ -232,20 +255,23 @@ class Quotes(callbacks.Plugin):
         for (option, arg) in optlist:
             if option == 'channel':
                 if not ircutils.isChannel(arg):
-                    irc.error(format(_('%s is not a valid channel.'), arg), Raise=True)
+                    irc.error(format(_('%s is not a valid channel.'), arg),
+                              Raise=True)
                 channel = arg
 
         qlist = self.db.searchQuote(channel, text)
 
         if len(qlist) > 0:
-            irc.reply(format("Quotes containing '%s': %s", text, ', '.join(qlist)))
+            irc.reply(format("Quotes containing '%s': %s",
+                             text, ', '.join(qlist)))
             for i in qlist[-3:]:
                 q = self.db.getQuoteById(channel, i)
                 irc.reply(format("#%s: %s", q[0], q[1]), noLengthCheck=True)
         else:
             irc.error(format(_("There is no quote that contains '%s'"), text))
 
-    findquote = wrap(findquote, [getopts({'channel': 'somethingWithoutSpaces'}), 'text'])
+    findquote = wrap(findquote,
+                     [getopts({'channel': 'somethingWithoutSpaces'}), 'text'])
 
     def quoteinfo(self, irc, msg, args, optlist, qid):
         """[--channel <#channel>] <id>
@@ -255,18 +281,22 @@ class Quotes(callbacks.Plugin):
         for (option, arg) in optlist:
             if option == 'channel':
                 if not ircutils.isChannel(arg):
-                    irc.error(format(_('%s is not a valid channel.'), arg), Raise=True)
+                    irc.error(format(_('%s is not a valid channel.'), arg),
+                              Raise=True)
                 channel = arg
 
         q = self.db.getQuoteById(channel, qid)
 
-        if q != None:
+        if q is not None:
             irc.reply(format("#%s: Quote stored by %s (%s)", q[0], q[2],
-                             datetime.fromtimestamp(q[3]).strftime("%Y-%m-%d %H:%M:%S")))
+                             datetime.fromtimestamp(q[3])
+                             .strftime("%Y-%m-%d %H:%M:%S")))
         else:
-            irc.error(format(_("No such quote %s in %s's database."), qid, channel))
+            irc.error(format(_("No such quote %s in %s's database."),
+                             qid, channel))
 
-    quoteinfo = wrap(quoteinfo, [getopts({'channel': 'somethingWithoutSpaces'}), 'int'])
+    quoteinfo = wrap(quoteinfo,
+                     [getopts({'channel': 'somethingWithoutSpaces'}), 'int'])
 
 Class = Quotes
 

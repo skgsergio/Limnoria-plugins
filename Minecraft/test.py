@@ -30,6 +30,7 @@
 
 from supybot.test import *
 
+
 class MinecraftTestCase(PluginTestCase):
     plugins = ('Minecraft',)
 

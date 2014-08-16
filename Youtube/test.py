@@ -30,40 +30,56 @@
 
 from supybot.test import *
 
+
 class YoutubeTestCase(ChannelPluginTestCase):
     plugins = ('Youtube',)
     timeout = 10
-    ytRegexp = '\x02YouTube\x02: Freddie Mercury Google Doodle - 0:01:39 - \d+ likes / \d+ dislikes - user: .+ - date: .+'
+    ytRegexp = '\x02YouTube\x02: Freddie Mercury Google Doodle ' \
+               '- 0:01:39 - \d+ likes / \d+ dislikes - user: .+ - date: .+'
     if network:
         def testYoutubeSnarferSort(self):
             try:
                 conf.supybot.plugins.Youtube.youtubeSnarfer.setValue(True)
-                self.assertSnarfRegexp('http://youtu.be/KX2BQM0D01M', self.ytRegexp)
-                                       
+                self.assertSnarfRegexp('http://youtu.be/KX2BQM0D01M',
+                                       self.ytRegexp)
             finally:
                 conf.supybot.plugins.Youtube.youtubeSnarfer.setValue(False)
 
         def testYoutubeSnarferDefault(self):
             try:
                 conf.supybot.plugins.Youtube.youtubeSnarfer.setValue(True)
-                self.assertSnarfRegexp('http://www.youtube.com/watch?v=KX2BQM0D01M', self.ytRegexp)
-                self.assertSnarfRegexp('http://www.youtube.com/watch?v=KX2BQM0D01M&feature=player_embedded#t=113', self.ytRegexp)
-                self.assertSnarfRegexp('http://www.youtube.com/watch?feature=player_embedded&v=KX2BQM0D01M#t=11', self.ytRegexp)
+                self.assertSnarfRegexp('http://www.youtube.com/watch?v='
+                                       'KX2BQM0D01M',
+                                       self.ytRegexp)
+                self.assertSnarfRegexp('http://www.youtube.com/watch?v='
+                                       'KX2BQM0D01M'
+                                       '&feature=player_embedded#t=113',
+                                       self.ytRegexp)
+                self.assertSnarfRegexp('http://www.youtube.com/watch?'
+                                       'feature=player_embedded&v='
+                                       'KX2BQM0D01M#t=11',
+                                       self.ytRegexp)
             finally:
                 conf.supybot.plugins.Youtube.youtubeSnarfer.setValue(False)
 
         def testYoutubeSnarferV(self):
             try:
                 conf.supybot.plugins.Youtube.youtubeSnarfer.setValue(True)
-                self.assertSnarfRegexp('http://www.youtube.com/v/KX2BQM0D01M', self.ytRegexp)
-                self.assertSnarfRegexp('http://youtube.googleapis.com/v/KX2BQM0D01M', self.ytRegexp)
+                self.assertSnarfRegexp('http://www.youtube.com/v/'
+                                       'KX2BQM0D01M',
+                                       self.ytRegexp)
+                self.assertSnarfRegexp('http://youtube.googleapis.com/v/'
+                                       'KX2BQM0D01M',
+                                       self.ytRegexp)
             finally:
                 conf.supybot.plugins.Youtube.youtubeSnarfer.setValue(False)
 
         def testYoutubeSnarferEmbed(self):
             try:
                 conf.supybot.plugins.Youtube.youtubeSnarfer.setValue(True)
-                self.assertSnarfRegexp('http://www.youtube.com/embed/KX2BQM0D01M', self.ytRegexp)
+                self.assertSnarfRegexp('http://www.youtube.com/embed/'
+                                       'KX2BQM0D01M',
+                                       self.ytRegexp)
             finally:
                 conf.supybot.plugins.Youtube.youtubeSnarfer.setValue(False)
 

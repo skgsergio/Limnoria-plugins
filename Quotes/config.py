@@ -34,14 +34,15 @@ try:
     from supybot.i18n import PluginInternationalization
     _ = PluginInternationalization('Quotes')
 except:
-    _ = lambda x:x
+    _ = lambda x: x
+
 
 def configure(advanced):
-    from supybot.questions import expect, anything, something, yn
     conf.registerPlugin('Quotes', True)
 
 Quotes = conf.registerPlugin('Quotes')
 conf.registerChannelValue(Quotes, 'enabled',
-    registry.Boolean(True, _("""Enable quotes on the channel.""")))
+                          registry.Boolean(True,
+                                           _("Enable quotes on the channel.")))
 
 # vim:set shiftwidth=4 tabstop=4 expandtab textwidth=79:
