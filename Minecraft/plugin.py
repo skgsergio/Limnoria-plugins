@@ -167,8 +167,9 @@ class Minecraft(callbacks.Plugin):
             if sys.version_info[0] < 3:
                 statusRes = statusReq.read()
             else:
-                statusRes = (statusReq.read()
-                             .decode(statusReq.headers.get_content_charset()))
+                statusChar = statusReq.headers.get_content_charset()
+                statusRes = statusReq.read().decode(statusChar if statusChar
+                                                    else 'utf-8')
 
             statusRes = json.loads(statusRes)
 
